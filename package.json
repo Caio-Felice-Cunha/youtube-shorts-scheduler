@@ -1,0 +1,27 @@
+{
+  "name": "youtube-shorts-scheduler",
+  "version": "1.0.0",
+  "description": "Upload and schedule videos to YouTube by driving YouTube Studio in your own logged-in Chrome over the DevTools Protocol. No upload API, no OS file dialog.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "upload": "node src/upload.mjs",
+    "batch": "node src/batch.mjs",
+    "connect-check": "node src/connect-check.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.49.0"
+  },
+  "keywords": [
+    "youtube",
+    "youtube-studio",
+    "scheduler",
+    "automation",
+    "playwright",
+    "cdp",
+    "shorts"
+  ]
+}

@@ -1,0 +1,40 @@
+# ─── secrets & credentials — NEVER commit ───────────────────────────
+.env
+*.env.local
+*token*.json
+*client*secret*.json
+*credentials*.json
+credentials/
+oauth/
+
+# ─── your own media & data ──────────────────────────────────────────
+videos/
+*.mp4
+*.mov
+*.webm
+*.mkv
+# your real manifest (keep the example committed)
+manifest.json
+*.local.json
+!manifest.example.json
+
+# ─── chrome profile / browser data ──────────────────────────────────
+chrome-profile/
+chrome-debug-profile/
+user-data/
+profile/
+
+# ─── runtime artifacts ──────────────────────────────────────────────
+*.log
+results/
+state/
+screenshots/
+shots/
+.posted.json
+.schedule-state.json
+
+# ─── node ───────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*

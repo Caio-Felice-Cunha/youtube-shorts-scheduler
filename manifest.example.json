@@ -1,0 +1,23 @@
+[
+  {
+    "file": "my-first-video.mp4",
+    "title": "Your video title here (max 100 characters)",
+    "description": "Your description.\n\nLine breaks are kept.\n#hashtags #go #here",
+    "publishAt": "2026-01-15 09:00",
+    "madeForKids": false
+  },
+  {
+    "file": "my-second-video.mp4",
+    "title": "A second title",
+    "description": "Another description.",
+    "publishAt": "2026-01-15 12:30",
+    "madeForKids": false
+  },
+  {
+    "file": "publish-now-example.mp4",
+    "title": "This one publishes immediately",
+    "description": "Omit publishAt to publish now at the chosen privacy.",
+    "privacy": "public",
+    "madeForKids": false
+  }
+]
