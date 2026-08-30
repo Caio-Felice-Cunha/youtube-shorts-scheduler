@@ -33,3 +33,8 @@ test('batch --demo dispatches without loading live mode', () => {
   assert.match(stdout, /3\/3 simulated/);
   assert.equal(fs.existsSync(path.join(output, 'demo-report.json')), true);
 });
+
+test('static viewer renders report values without HTML injection sinks', () => {
+  const viewer = fs.readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(viewer, /innerHTML|insertAdjacentHTML|document\.write/);
+});
