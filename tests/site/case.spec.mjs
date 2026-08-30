@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test.beforeEach(async ({ page }) => {
   const failures = [];
@@ -35,4 +36,16 @@ test('supports keyboard navigation, reduced motion, and narrow screens', async (
   await expect(page.locator('#demo')).toBeFocused();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test('WCAG AA audit passes', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#items article').first().waitFor();
+  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  const summary = violations.map(({ id, impact, nodes }) => ({
+    id,
+    impact,
+    targets: nodes.map((node) => node.target.join(' ')),
+  }));
+  expect(summary).toEqual([]);
 });
