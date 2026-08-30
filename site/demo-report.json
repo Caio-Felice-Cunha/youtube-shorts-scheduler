@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "tool": "YouTube Shorts Scheduler",
+  "mode": "demo",
+  "fixture": "manifest.example.json",
+  "generatedAt": "2026-08-29T12:00:00.000Z",
+  "items": [
+    {
+      "key": "my-first-video.mp4",
+      "status": "simulated",
+      "ok": true,
+      "id": "yt-1",
+      "label": "Your video title here (max 100 characters)",
+      "scheduledFor": "2026-01-15 09:00",
+      "steps": [
+        {
+          "name": "validate-fixture",
+          "status": "passed",
+          "detail": "my-first-video.mp4 and required metadata accepted."
+        },
+        {
+          "name": "simulate-upload",
+          "status": "simulated",
+          "detail": "A local mock acknowledged the media; no bytes were uploaded."
+        },
+        {
+          "name": "set-audience",
+          "status": "passed",
+          "detail": "Fixture marks the audience as not made for kids."
+        },
+        {
+          "name": "verify-schedule",
+          "status": "passed",
+          "detail": "Wall-clock target 2026-01-15 09:00 preserved."
+        },
+        {
+          "name": "persist-resume-state",
+          "status": "simulated",
+          "detail": "The mock marks this fixture item complete for a resumable batch."
+        }
+      ]
+    },
+    {
+      "key": "my-second-video.mp4",
+      "status": "simulated",
+      "ok": true,
+      "id": "yt-2",
+      "label": "A second title",
+      "scheduledFor": "2026-01-15 12:30",
+      "steps": [
+        {
+          "name": "validate-fixture",
+          "status": "passed",
+          "detail": "my-second-video.mp4 and required metadata accepted."
+        },
+        {
+          "name": "simulate-upload",
+          "status": "simulated",
+          "detail": "A local mock acknowledged the media; no bytes were uploaded."
+        },
+        {
+          "name": "set-audience",
+          "status": "passed",
+          "detail": "Fixture marks the audience as not made for kids."
+        },
+        {
+          "name": "verify-schedule",
+          "status": "passed",
+          "detail": "Wall-clock target 2026-01-15 12:30 preserved."
+        },
+        {
+          "name": "persist-resume-state",
+          "status": "simulated",
+          "detail": "The mock marks this fixture item complete for a resumable batch."
+        }
+      ]
+    },
+    {
+      "key": "publish-now-example.mp4",
+      "status": "simulated",
+      "ok": true,
+      "id": "yt-3",
+      "label": "This one publishes immediately",
+      "scheduledFor": null,
+      "steps": [
+        {
+          "name": "validate-fixture",
+          "status": "passed",
+          "detail": "publish-now-example.mp4 and required metadata accepted."
+        },
+        {
+          "name": "simulate-upload",
+          "status": "simulated",
+          "detail": "A local mock acknowledged the media; no bytes were uploaded."
+        },
+        {
+          "name": "set-audience",
+          "status": "passed",
+          "detail": "Fixture marks the audience as not made for kids."
+        },
+        {
+          "name": "verify-visibility",
+          "status": "passed",
+          "detail": "Visibility would be public."
+        },
+        {
+          "name": "persist-resume-state",
+          "status": "simulated",
+          "detail": "The mock marks this fixture item complete for a resumable batch."
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "simulated": 3,
+    "failed": 0,
+    "externalWrites": 0
+  }
+}
