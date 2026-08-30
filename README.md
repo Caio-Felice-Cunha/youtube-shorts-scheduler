@@ -4,7 +4,7 @@ Validate and rehearse an upload/scheduling batch offline, then use the same batc
 
 ![YouTube Shorts Scheduler social preview](site/social-card.svg)
 
-[Try the demo](https://caio-felice-cunha.github.io/youtube-shorts-scheduler/) · [Read the case study](#architecture) · [Run locally](#offline-demo)
+[Try the demo](https://caio-felice-cunha.github.io/youtube-shorts-scheduler/) · [Engineering case](https://caio-felice-cunha.github.io/youtube-shorts-scheduler/#architecture) · [View source](https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler) · [Run locally](#offline-demo)
 
 **Interactive demo** · No login · No network call · No external write
 

@@ -1,3 +1,114 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="A deterministic, zero-network replay of a YouTube scheduling batch."><title>YouTube Shorts Scheduler - Offline Demo</title><link rel="stylesheet" href="styles.css"></head>
-<body><main><p class="eyebrow">INTERACTIVE DEMO · ZERO EXTERNAL WRITES</p><h1>Scheduling logic, without the upload.</h1><p class="lede">Replay validation, upload and schedule verification against synthetic fixtures. YouTube Studio is never opened.</p><div class="actions"><button id="run" type="button">Replay batch</button><a href="https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler#readme">Read the case study</a></div><section aria-labelledby="summary-title"><h2 id="summary-title">Run summary</h2><div id="summary" class="summary" aria-live="polite"></div></section><section aria-labelledby="items-title"><h2 id="items-title">Fixture items</h2><div id="items" class="items"></div></section></main><script type="module" src="app.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive offline replay and engineering case study for a resumable YouTube Shorts scheduler.">
+  <meta name="theme-color" content="#0c0c0e">
+  <title>YouTube Shorts Scheduler — Engineering case</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="case.css">
+</head>
+<body>
+  <a class="skip-link" href="#demo">Skip to demo</a>
+  <header class="topbar">
+    <a class="brand" href="#top">YT<span>/queue</span></a>
+    <nav aria-label="Primary"><a href="#demo">Demo</a><a href="#architecture">Architecture</a><a href="#code">Code</a></nav>
+    <a href="https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler">View source ↗</a>
+  </header>
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Interactive demo · zero uploads</p>
+      <h1>Schedule logic,<br><em>without the upload.</em></h1>
+      <p class="lede">Replay validation, audience, visibility, scheduling, verification, and resume state against synthetic fixtures. YouTube Studio is never opened.</p>
+      <div class="actions">
+        <a class="button primary" href="#demo">Try the demo</a>
+        <a class="button" href="#architecture">Engineering case</a>
+        <a class="button" href="https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler">View source</a>
+        <a class="button" href="#run">Run locally</a>
+      </div>
+    </section>
+
+    <section id="demo" class="demo-section" aria-labelledby="demo-title" tabindex="-1">
+      <div class="section-head"><div><p class="eyebrow">60-second deterministic replay</p><h2 id="demo-title">Inspect each scheduling decision.</h2></div><p>The mock adapter preserves the live manifest contract and produces evidence for every item without loading a browser client.</p></div>
+      <button id="run" type="button">Replay batch</button>
+      <div id="summary" class="summary" aria-live="polite"></div>
+      <div id="items" class="items" aria-label="Fixture results"></div>
+    </section>
+
+    <section class="case-section problem">
+      <div><p class="eyebrow">Problem</p><h2>A successful upload is not proof of a correct schedule.</h2></div>
+      <div class="prose"><p>Studio changes the number of wizard steps by channel, disables controls during processing, and accepts wall-clock dates in the channel timezone. A premature click can leave a private draft; an unchecked field can schedule the wrong moment.</p><p>The scheduler models the batch independently from Studio, makes audience and visibility explicit, reads date and time back before finalization, and persists completed keys for safe resume.</p></div>
+    </section>
+
+    <section id="architecture" class="case-section">
+      <div class="section-head"><div><p class="eyebrow">Architecture</p><h2>Deterministic orchestration around a volatile UI.</h2></div><p>Only the injected live adapter knows selectors or CDP. Validation, sequencing, failure behavior, and reporting stay testable without YouTube.</p></div>
+      <div class="flow" role="img" aria-label="A manifest flows through validation, resumable batch core, injected demo or YouTube Studio adapter, readback verification, and durable state.">
+        <span>manifest.json</span><b>→</b><span>validation</span><b>→</b><span>batch core</span><b>→</b><span>demo / Studio adapter</span><b>→</b><span>readback verification</span><b>→</b><span>resume state</span>
+      </div>
+      <div class="card-grid four"><article><h3>Manifest</h3><p>File, title, description, audience, visibility, and optional wall-clock target are explicit inputs.</p></article><article><h3>Batch core</h3><p>Stable keys drive order, deduplication, pacing, stop-on-error behavior, and event evidence.</p></article><article><h3>Studio adapter</h3><p>Owns CDP file injection, variable wizard steps, enabled-state waits, and native controls.</p></article><article><h3>Verification</h3><p>Requested date and time are compared with Studio readback before the final button is allowed.</p></article></div>
+    </section>
+
+    <section class="case-section">
+      <div class="section-head"><div><p class="eyebrow">Workflow</p><h2>Seven stages guard the terminal click.</h2></div><p>The adapter moves forward only when the previous platform state is observable.</p></div>
+      <ol class="state-flow"><li><b>01</b><strong>Validate</strong><span>Media, title, values, and stable key.</span></li><li><b>02</b><strong>Upload</strong><span>Inject media through CDP.</span></li><li><b>03</b><strong>Details</strong><span>Title and description.</span></li><li><b>04</b><strong>Audience</strong><span>Made-for-kids choice is explicit.</span></li><li><b>05</b><strong>Visibility</strong><span>Schedule or public/private/unlisted.</span></li><li><b>06</b><strong>Verify</strong><span>Read date and time back.</span></li><li><b>07</b><strong>Persist</strong><span>Finalize, save key, then pace.</span></li></ol>
+      <div class="decision-grid"><article><strong>Enabled-state gate</strong><p><code>aria-disabled</code> is polled before Next or Done. This prevents a silent private draft while processing is incomplete.</p></article><article><strong>Timezone contract</strong><p>The manifest carries a wall-clock value interpreted in the configured channel timezone; the adapter does not silently convert it.</p></article><article><strong>Mismatch abort</strong><p>A readback mismatch throws before Done, directly preventing publication at an unintended time.</p></article></div>
+    </section>
+
+    <section id="code" class="case-section">
+      <div class="section-head"><div><p class="eyebrow">Real, linked code</p><h2>The critical guards are small and reviewable.</h2></div><p>These excerpts are taken from the public implementation.</p></div>
+      <div class="code-grid">
+        <article><header><span>ENABLED-STATE GATE</span><a href="https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler/blob/main/src/upload.mjs">upload.mjs ↗</a></header><pre><code>while (Date.now() - start &lt; timeoutMs) {
+  if (await el.count()) {
+    const aria = await el.getAttribute('aria-disabled');
+    if (aria !== 'true') {
+      await el.click();
+      return;
+    }
+  }
+  await sleep(1000);
+}</code></pre><p>The automation waits for Studio's real control state instead of assuming that a visible button is actionable.</p></article>
+        <article><header><span>SCHEDULE READBACK</span><a href="https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler/blob/main/src/upload.mjs">upload.mjs ↗</a></header><pre><code>const rb = await page.evaluate(() =&gt; ({
+  date: document.querySelector('#datepicker-trigger')
+    ?.innerText.trim(),
+  time: document.querySelector(
+    'tp-yt-paper-input#textbox input'
+  )?.value
+}));
+
+if (rb.date !== dateLabel || rb.time !== timeLabel) {
+  throw new Error('schedule mismatch');
+}</code></pre><p>Finalization is impossible when the platform does not echo the exact requested wall-clock target.</p></article>
+        <article><header><span>RESUME BEFORE ADAPTER</span><a href="https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler/blob/main/src/batch-core.mjs">batch-core.mjs ↗</a></header><pre><code>if (doneSet.has(key)) {
+  results.push({ key, status: 'skipped', steps: [] });
+  onEvent({ type: 'skipped', key, done: [...doneSet] });
+  continue;
+}</code></pre><p>A completed item never reaches the upload adapter on a resumed run.</p></article>
+      </div>
+    </section>
+
+    <section class="case-section boundary">
+      <div class="section-head"><div><p class="eyebrow">Execution boundary</p><h2>The public path has no upload capability.</h2></div><p>Demo mode is a separate import graph, backed by a local mock and static evidence.</p></div>
+      <div class="boundary-grid"><article><span>DEMO</span><h3><code>npm run demo</code></h3><ul><li>Synthetic fixture</li><li>Deterministic adapter</li><li>No media bytes transmitted</li><li>No Playwright, CDP, login, or Studio</li></ul></article><article><span>LIVE</span><h3><code>npm run batch</code></h3><ul><li>Operator-owned media and channel</li><li>Attached Chrome profile</li><li>Native upload and schedule UI</li><li>Explicit consequential command</li></ul></article></div>
+    </section>
+
+    <section class="case-section">
+      <div class="section-head"><div><p class="eyebrow">Quality and limitations</p><h2>Evidence for the core; caution for the platform edge.</h2></div></div>
+      <div class="quality-grid"><article><strong>0</strong><span>demo uploads</span></article><article><strong>5</strong><span>offline core tests</span></article><article><strong>3</strong><span>synthetic fixture items</span></article><article><strong>1</strong><span>terminal schedule guard</span></article></div>
+      <ul class="limits"><li>Unit tests cover the batch core, report contract, deterministic output, dependency boundary, and injection sinks.</li><li>Pages tests cover desktop/mobile rendering, keyboard navigation, reduced motion, report parity, console errors, and unexpected network requests.</li><li>Studio selectors, wizard steps, and labels can change and require adapter maintenance.</li><li>Wall-clock semantics depend on the channel timezone configured in YouTube Studio.</li><li>Live runs should remain supervised and the resulting Studio queue should be reviewed.</li></ul>
+    </section>
+
+    <section id="run" class="run-card"><div><p class="eyebrow">Run locally</p><h2>Generate the offline evidence.</h2><p>No login or API key is required for demo mode.</p></div><pre><code>npm install
+npm run demo
+npm test
+npm run test:site
+
+# equivalent explicit CLI
+node src/demo.mjs \
+  --fixture manifest.example.json \
+  --output site</code></pre></section>
+  </main>
+  <footer><span>MIT-licensed demonstration code by Caio Di Felice Cunha</span><a href="https://github.com/Caio-Felice-Cunha/youtube-shorts-scheduler#one-time-setup">Operator guide ↗</a></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -12,10 +12,16 @@
     "batch": "node src/batch.mjs",
     "connect-check": "node src/connect-check.mjs",
     "demo": "node src/demo.mjs --fixture manifest.example.json --output site",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "test:site": "playwright test",
+    "test:all": "npm run demo && npm test && npm run test:site"
   },
   "dependencies": {
     "playwright-core": "^1.49.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.0",
+    "http-server": "14.1.1"
   },
   "keywords": [
     "youtube",
