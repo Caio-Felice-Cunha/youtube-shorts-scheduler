@@ -1,4 +1,27 @@
-# youtube-shorts-scheduler
+# YouTube Shorts Scheduler
+
+Validate and rehearse an upload/scheduling batch offline, then use the same batch engine against YouTube Studio only when you deliberately choose live mode.
+
+![YouTube Shorts Scheduler social preview](site/social-card.svg)
+
+[Try the demo](https://caio-felice-cunha.github.io/youtube-shorts-scheduler/) · [Read the case study](#architecture) · [Run locally](#offline-demo)
+
+**Interactive demo** · No login · No network call · No external write
+
+## Offline demo
+
+```bash
+npm install
+npm run demo
+```
+
+Open `site/index.html` through a static server. The versioned fixture is processed by a mock adapter and produces `site/demo-report.json`. Demo mode never imports Playwright, opens Chrome, contacts YouTube Studio, uploads media, or schedules content.
+
+## Architecture
+
+`batch-core.mjs` owns resumable sequencing. Live mode injects the CDP-backed upload adapter; demo mode injects a deterministic mock adapter. Tests guard this dependency boundary.
+
+> **Live mode is explicit and potentially consequential.** Only `npm run batch` / `npm run upload` can attach to Chrome and write to YouTube. Review the manifest first and use only channels and media you control.
 
 Upload and **schedule** videos to YouTube by driving **YouTube Studio** in your own
 logged-in Chrome over the Chrome DevTools Protocol (CDP). No upload API, no OAuth

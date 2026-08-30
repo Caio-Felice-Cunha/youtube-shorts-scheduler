@@ -10,7 +10,9 @@
   "scripts": {
     "upload": "node src/upload.mjs",
     "batch": "node src/batch.mjs",
-    "connect-check": "node src/connect-check.mjs"
+    "connect-check": "node src/connect-check.mjs",
+    "demo": "node src/demo.mjs --fixture manifest.example.json --output site",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "playwright-core": "^1.49.0"
