@@ -1,0 +1,17 @@
+/* Dense technical content must not require pointer-only horizontal scrolling. */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+.flow span {
+  flex: 1 1 125px;
+}
+
+.code-grid pre,
+.run-card pre {
+  overflow: visible;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
